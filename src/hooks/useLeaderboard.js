@@ -47,7 +47,9 @@ export const useLeaderboard = () => {
             }
         } catch (err) {
             console.error('Error loading server leaderboard:', err);
+            setError('Failed to load server leaderboard, showing local data');
             // Fallback to local leaderboard
+            await loadLocalLeaderboard();
             await loadLocalLeaderboard();
         } finally {
             setLoading(false);
@@ -67,14 +69,14 @@ export const useLeaderboard = () => {
     }, []);
 
     /**
-     * Refresh all data
+     * Refresh all data - prioritize server data
      */
     const refreshData = useCallback(async () => {
         await Promise.all([
-            loadLocalLeaderboard(),
+            loadServerLeaderboard(), // Load from server first
             loadGameStats(),
         ]);
-    }, [loadLocalLeaderboard, loadGameStats]);
+    }, [loadServerLeaderboard, loadGameStats]);
 
     /**
      * Get user's rank in leaderboard

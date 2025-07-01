@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "guessword-native-app",
+    "name": "GUESSWORD",
     "slug": "guessword-native-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -10,20 +10,41 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#5e72e4"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.guessword.app",
+      "infoPlist": {
+        "UILaunchStoryboardName": "SplashScreen",
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#5e72e4"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.guessword.app",
+      "versionCode": 1,
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE"
+      ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4fdf0469-5b3f-4c6c-934f-739535e8cfe8"
+      }
+    },
+    "owner": "bhusallaxman22"
   }
 }

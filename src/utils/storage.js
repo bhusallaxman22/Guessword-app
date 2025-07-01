@@ -218,3 +218,39 @@ export const updateGameStats = async (gameResult) => {
         return false;
     }
 };
+
+/**
+ * Check if stored user data needs to be refreshed from server
+ * @returns {Promise<boolean>} True if user data needs refresh
+ */
+export const needsUserDataRefresh = async () => {
+    const { userId } = await getUserData();
+    if (!userId) {
+        return true; // No user data, needs refresh
+    }
+
+    // Check if userId is in MongoDB ObjectId format (24 hex chars)
+    const isValidFormat = /^[0-9a-fA-F]{24}$/.test(userId);
+    if (!isValidFormat) {
+        console.log('Stored userId is in old format, needs refresh:', userId);
+        return true;
+    }
+
+    return false; // UserId is valid
+};
+
+/**
+ * Clear old user data to force refresh from server
+ * @returns {Promise<boolean>} Success status
+ */
+export const clearUserData = async () => {
+    try {
+        await removeData(STORAGE_KEYS.USER_ID);
+        await removeData(STORAGE_KEYS.USERNAME);
+        console.log('User data cleared, will fetch fresh from server');
+        return true;
+    } catch (error) {
+        console.error('Error clearing user data:', error);
+        return false;
+    }
+};

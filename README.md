@@ -27,6 +27,37 @@ GUESSWORD is an engaging word puzzle game where players have to guess a hidden 4
 3. Use the feedback to narrow down your next guess
 4. Complete levels to unlock new challenges
 
+## 🌐 Backend Integration
+
+The app integrates with Netlify Functions hosted at `https://guessword.bhusallaxman.com.np/` for:
+
+- **Username Generation**: Server generates unique usernames and user IDs
+- **Word Fetching**: Encrypted words are fetched from the backend and decrypted client-side using AES-CBC encryption
+- **Leaderboard**: Real-time leaderboard updates from the server
+- **Result Recording**: Game results are sent to the server for global leaderboards
+
+#### API Endpoints
+
+- `GET /genUsername` - Generate a new username and user ID
+- `GET /getWordOfTheDay?level=${level}` - Fetch encrypted word for a specific level
+- `POST /recordResult` - Submit game results (userId, attempts, timeMs)
+- `GET /getLeaderboard` - Fetch global leaderboard data
+- `GET /health` - Health check endpoint
+
+#### Decryption
+
+Words are encrypted using AES-CBC with a 256-bit key. The client-side decryption process:
+1. Decode base64 payload
+2. Extract IV (first 16 bytes) and ciphertext
+3. Decrypt using the provided key: `sZWs+NciBq/DOwBm+csybg22zeVZTxTmatVHs+0cats=`
+
+#### Offline Fallback
+
+The app gracefully handles network failures by:
+- Using locally generated usernames if server is unavailable
+- Storing results locally when unable to reach the server
+- Displaying local leaderboard data as fallback
+
 ## 🏗️ Architecture
 
 This project follows **Atomic Design** principles for component organization:

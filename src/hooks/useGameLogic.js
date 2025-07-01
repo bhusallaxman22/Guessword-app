@@ -145,7 +145,12 @@ export const useGameLogic = () => {
 
             // Record result
             try {
-                await postResult(userId, newAttempts, timeMs);
+                console.log('🎯 Game won! Posting result to server...');
+                console.log('Result data:', { userId, attempts: newAttempts, timeMs, level: currentLevel });
+
+                const postSuccess = await postResult(userId, newAttempts, timeMs);
+                console.log('Post result success:', postSuccess);
+
                 await addToLeaderboard({
                     userId,
                     username,
@@ -160,6 +165,7 @@ export const useGameLogic = () => {
                 });
             } catch (err) {
                 console.error('Error recording result:', err);
+                console.error('Result data that failed:', { userId, attempts: newAttempts, timeMs });
             }
 
             return { won: true, attempts: newAttempts, timeMs };

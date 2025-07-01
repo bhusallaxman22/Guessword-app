@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getUserData, storeUserData, isFirstLaunch, setFirstLaunchCompleted } from '../utils/storage';
+import { getUserData, storeUserData, isFirstLaunch, setFirstLaunchCompleted, needsUserDataRefresh, clearUserData } from '../utils/storage';
 import { fetchUsername } from '../services/wordService';
 
 /**
@@ -22,10 +22,20 @@ export const useUserData = () => {
             const isFirst = await isFirstLaunch();
             setFirstLaunch(isFirst);
 
+            // Check if stored user data needs refresh (old format userId)
+            const needsRefresh = await needsUserDataRefresh();
+            if (needsRefresh) {
+                console.log('User data needs refresh, clearing old data and fetching from server');
+                await clearUserData();
+                await createNewUser();
+                return;
+            }
+
             // Try to load existing user data
             const { userId: storedUserId, username: storedUsername } = await getUserData();
 
             if (storedUserId && storedUsername) {
+                console.log('Using stored user data:', { userId: storedUserId, username: storedUsername });
                 setUserId(storedUserId);
                 setUsername(storedUsername);
             } else {

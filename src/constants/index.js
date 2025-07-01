@@ -107,6 +107,11 @@ export const MESSAGES = {
     LOADING: 'Loading...',
     NO_INTERNET: 'No internet connection. Please check your network.',
     ERROR_LOADING_WORD: 'Could not load the next word. Please try refreshing.',
+    API_ERROR: 'Server error. Please try again later.',
+    DECRYPTION_ERROR: 'Could not decrypt word data.',
+    USERNAME_ERROR: 'Could not get username from server. Using fallback.',
+    RESULT_POST_ERROR: 'Could not save your score. Playing offline.',
+    LEADERBOARD_ERROR: 'Could not load online leaderboard. Showing local scores.',
 };
 
 /**
@@ -117,4 +122,14 @@ export const ANIMATION_DURATION = {
     medium: 400,
     long: 800,
     graffiti: 2800,
+};
+
+/**
+ * API Configuration constants
+ */
+export const API_CONFIG = {
+    baseUrl: 'https://guessword.bhusallaxman.com.np/.netlify/functions',
+    timeout: 10000,
+    retryAttempts: 2,
+    retryDelay: 1000,
 };

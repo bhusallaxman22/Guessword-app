@@ -92,19 +92,24 @@ export const formatTime = (timeMs) => {
 };
 
 /**
- * Convert base64 string to Uint8Array
+ * Convert base64 string to Uint8Array for React Native
  * @param {string} base64 - Base64 string
  * @returns {Uint8Array} Converted array
  */
 export const base64ToUint8Array = (base64) => {
-    // For React Native, we'll need to use a different approach
-    // This is a placeholder - in real implementation, you'd use a library like base-64
-    const binary = atob(base64);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) {
-        bytes[i] = binary.charCodeAt(i);
+    try {
+        // Use the base-64 library for proper decoding in React Native
+        const { decode } = require('base-64');
+        const binary = decode(base64);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return bytes;
+    } catch (error) {
+        console.error('Error converting base64 to Uint8Array:', error);
+        throw new Error('Failed to decode base64 data');
     }
-    return bytes;
 };
 
 /**
@@ -113,14 +118,24 @@ export const base64ToUint8Array = (base64) => {
  */
 export const checkInternetConnection = async () => {
     try {
-        const response = await fetch('https://www.google.com', {
+        const response = await fetch('https://guessword.bhusallaxman.com.np/.netlify/functions/health', {
             method: 'HEAD',
-            mode: 'no-cors',
             cache: 'no-cache',
+            timeout: 5000,
         });
-        return true;
+        return response.ok;
     } catch (error) {
-        return false;
+        // Fallback to a more general check
+        try {
+            const fallbackResponse = await fetch('https://www.google.com', {
+                method: 'HEAD',
+                mode: 'no-cors',
+                cache: 'no-cache',
+            });
+            return true;
+        } catch (fallbackError) {
+            return false;
+        }
     }
 };
 
@@ -148,9 +163,129 @@ export const deepClone = (obj) => {
 };
 
 /**
- * Generate unique ID
- * @returns {string} Unique ID
+ * Generate unique ID in MongoDB ObjectId format (24 character hex string)
+ * @returns {string} Unique ID in ObjectId format
  */
 export const generateId = () => {
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    // Generate a 24 character hex string (12 bytes = 24 hex chars)
+    // First 4 bytes: timestamp (seconds since epoch)
+    const timestamp = Math.floor(Date.now() / 1000);
+
+    // Remaining 8 bytes: random data
+    const randomBytes = new Array(8);
+    for (let i = 0; i < 8; i++) {
+        randomBytes[i] = Math.floor(Math.random() * 256);
+    }
+
+    // Convert to hex
+    const timestampHex = timestamp.toString(16).padStart(8, '0');
+    const randomHex = randomBytes.map(b => b.toString(16).padStart(2, '0')).join('');
+
+    return timestampHex + randomHex;
+};
+
+/**
+ * Validate if a string is a valid MongoDB ObjectId format
+ * @param {string} id - ID to validate
+ * @returns {boolean} True if valid ObjectId format
+ */
+export const isValidObjectId = (id) => {
+    return typeof id === 'string' && /^[0-9a-fA-F]{24}$/.test(id);
+};
+
+/**
+ * Retry an async function with exponential backoff
+ * @param {Function} fn - Async function to retry
+ * @param {number} maxAttempts - Maximum number of attempts
+ * @param {number} baseDelay - Base delay in milliseconds
+ * @returns {Promise} Promise resolving to function result
+ */
+export const retryWithBackoff = async (fn, maxAttempts = 3, baseDelay = 1000) => {
+    let lastError;
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+            return await fn();
+        } catch (error) {
+            lastError = error;
+
+            if (attempt === maxAttempts) {
+                throw error;
+            }
+
+            // Exponential backoff with jitter
+            const delay = baseDelay * Math.pow(2, attempt - 1) + Math.random() * 1000;
+            await new Promise((resolve) => setTimeout(resolve, delay));
+        }
+    }
+
+    throw lastError;
+};
+
+/**
+ * Create a timeout promise
+ * @param {number} ms - Timeout in milliseconds
+ * @returns {Promise} Promise that rejects after timeout
+ */
+export const createTimeout = (ms) => {
+    return new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Request timeout')), ms);
+    });
+};
+
+/**
+ * Fetch with timeout and retry
+ * @param {string} url - URL to fetch
+ * @param {Object} options - Fetch options
+ * @param {number} timeout - Timeout in milliseconds
+ * @param {number} retries - Number of retries
+ * @returns {Promise<Response>} Promise resolving to fetch response
+ */
+export const fetchWithTimeout = async (url, options = {}, timeout = 10000, retries = 2) => {
+    const fetchFn = async () => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+        try {
+            const response = await fetch(url, {
+                ...options,
+                signal: controller.signal,
+            });
+            clearTimeout(timeoutId);
+            return response;
+        } catch (error) {
+            clearTimeout(timeoutId);
+            throw error;
+        }
+    };
+
+    return retryWithBackoff(fetchFn, retries + 1, 1000);
+};
+
+/**
+ * Handle API errors gracefully
+ * @param {Error} error - The error object
+ * @param {string} operation - Description of the operation that failed
+ * @returns {string} User-friendly error message
+ */
+export const handleApiError = (error, operation) => {
+    console.error(`${operation} failed:`, error);
+
+    if (error.name === 'AbortError' || error.message.includes('timeout')) {
+        return 'Connection timeout. Please check your internet and try again.';
+    }
+
+    if (error.message.includes('Failed to fetch') || error.message.includes('Network request failed')) {
+        return 'No internet connection. Please check your network.';
+    }
+
+    if (error.message.includes('404')) {
+        return 'Requested data not found.';
+    }
+
+    if (error.message.includes('500') || error.message.includes('502') || error.message.includes('503')) {
+        return 'Server error. Please try again later.';
+    }
+
+    return 'Something went wrong. Please try again.';
 };
