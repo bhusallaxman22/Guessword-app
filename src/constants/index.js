@@ -11,39 +11,47 @@ export const GAME_CONFIG = {
  * Theme colors for the application
  */
 export const THEME_COLORS = {
-    primary: '#5e72e4',
-    primaryDark: '#4a5cc0',
-    secondary: '#f5365c',
-    success: '#2dce89',
-    warning: '#fbcf33',
-    danger: '#f5365c',
-    info: '#5e72e4',
+    primary: '#667eea',
+    primaryDark: '#5a6fd8',
+    secondary: '#f093fb',
+    success: '#4ecdc4',
+    warning: '#ffeaa7',
+    danger: '#fd79a8',
+    info: '#74b9ff',
     light: '#f8f9fc',
-    dark: '#32325d',
+    dark: '#2d3436',
     white: '#ffffff',
     transparent: 'transparent',
 
     // UI colors
-    background: '#f8f9fc',
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    backgroundSolid: '#f8f9fc',
     surface: '#ffffff',
     border: '#e9ecef',
-    textPrimary: '#32325d',
-    textSecondary: '#6c757d',
+    textPrimary: '#2d3436',
+    textSecondary: '#636e72',
 
     // Game specific colors
-    letterBoxBorder: '#d1d8e0',
+    letterBoxBorder: '#ddd',
     letterBoxBackground: '#ffffff',
-    scoreGreen: '#2dce89',
-    scoreYellow: '#fbcf33',
+    scoreGreen: '#4ecdc4',
+    scoreYellow: '#ffeaa7',
 
     // Keyboard colors
-    keyboardDefault: '#6c757d',
-    keyboardDisabled: '#495057',
-    keyboardSpecial: '#343a40', // Darker color for ENTER/BACKSPACE
+    keyboardDefault: '#636e72',
+    keyboardDisabled: '#b2bec3',
+    keyboardSpecial: '#2d3436', // Darker color for ENTER/BACKSPACE
 
     // Gradient colors
     gradientStart: '#667eea',
     gradientEnd: '#764ba2',
+    gradientAccent: '#f093fb',
+
+    // New modern colors
+    cardBackground: '#ffffff',
+    cardShadow: 'rgba(0, 0, 0, 0.05)',
+    accent: '#ff6b6b',
+    muted: '#74b9ff',
 };
 
 /**
@@ -52,9 +60,9 @@ export const THEME_COLORS = {
 export const SPACING = {
     xs: 4,
     sm: 8,
-    md: 16,
-    lg: 24,
-    xl: 32,
+    md: 12,
+    lg: 20,
+    xl: 28,
 };
 
 /**

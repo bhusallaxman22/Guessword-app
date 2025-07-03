@@ -1,7 +1,8 @@
 import React, { forwardRef } from 'react';
 import { TextInput as PaperTextInput } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
-import { THEME_COLORS, BORDER_RADIUS, SPACING, FONT_SIZES } from '../../constants';
+import { BORDER_RADIUS, SPACING, FONT_SIZES } from '../../constants';
+import { useThemeColors } from '../../hooks/useThemeColors';
 
 /**
  * Custom TextInput atom component
@@ -28,6 +29,21 @@ const TextInput = forwardRef(({
     style,
     ...props
 }, ref) => {
+    const THEME_COLORS = useThemeColors();
+
+    const styles = StyleSheet.create({
+        input: {
+            backgroundColor: THEME_COLORS.white,
+        },
+        content: {
+            paddingHorizontal: SPACING.sm,
+        },
+        outline: {
+            borderRadius: BORDER_RADIUS.md,
+            borderWidth: 2,
+        },
+    });
+
     const getSizeStyles = () => {
         switch (size) {
             case 'small':
@@ -77,19 +93,6 @@ const TextInput = forwardRef(({
             {...props}
         />
     );
-});
-
-const styles = StyleSheet.create({
-    input: {
-        backgroundColor: THEME_COLORS.white,
-    },
-    content: {
-        paddingHorizontal: SPACING.sm,
-    },
-    outline: {
-        borderRadius: BORDER_RADIUS.md,
-        borderWidth: 2,
-    },
 });
 
 export default TextInput;

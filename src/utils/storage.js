@@ -254,3 +254,18 @@ export const clearUserData = async () => {
         return false;
     }
 };
+
+/**
+ * Storage object for general-purpose storage operations
+ */
+export const storage = {
+    setItem: async (key, value) => {
+        return await storeData(key, value);
+    },
+    getItem: async (key) => {
+        return await getData(key);
+    },
+    removeItem: async (key) => {
+        return await removeData(key);
+    }
+};

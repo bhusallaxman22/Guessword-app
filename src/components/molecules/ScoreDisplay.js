@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, Badge } from '../atoms';
-import { SPACING, THEME_COLORS } from '../../constants';
+import { useThemeColors } from '../../hooks/useThemeColors';
+import { SPACING } from '../../constants';
 
 /**
  * ScoreDisplay molecule component for showing game scores
@@ -17,6 +18,21 @@ const ScoreDisplay = ({
     size = 'medium',
     showLabels = false,
 }) => {
+    const styles = StyleSheet.create({
+        container: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: SPACING.sm,
+        },
+        scoreItem: {
+            alignItems: 'center',
+            gap: SPACING.xs,
+        },
+        label: {
+            textAlign: 'center',
+        },
+    });
+
     return (
         <View style={styles.container}>
             <View style={styles.scoreItem}>
@@ -58,6 +74,27 @@ const GameStats = ({
     totalAttempts = 0,
     timeElapsed = '0:00',
 }) => {
+    const themeColors = useThemeColors();
+
+    const styles = StyleSheet.create({
+        statsContainer: {
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            paddingVertical: SPACING.sm,
+            paddingHorizontal: SPACING.md,
+            backgroundColor: themeColors.light,
+            borderRadius: 12,
+        },
+        statItem: {
+            alignItems: 'center',
+            gap: SPACING.xs,
+        },
+        statLabel: {
+            textAlign: 'center',
+        },
+    });
+
     return (
         <View style={styles.statsContainer}>
             <View style={styles.statItem}>
@@ -107,6 +144,40 @@ const LevelDisplay = ({
     showProgress = false,
     totalLevels = 5,
 }) => {
+    const themeColors = useThemeColors();
+
+    const styles = StyleSheet.create({
+        levelContainer: {
+            alignItems: 'center',
+            paddingVertical: SPACING.sm,
+        },
+        levelHeader: {
+            alignItems: 'center',
+            marginBottom: SPACING.xs,
+        },
+        levelTitle: {
+            textAlign: 'center',
+            marginTop: SPACING.xs,
+        },
+        progressContainer: {
+            alignItems: 'center',
+            gap: SPACING.xs,
+            width: '100%',
+        },
+        progressBar: {
+            width: '80%',
+            height: 4,
+            backgroundColor: themeColors.letterBoxBorder,
+            borderRadius: 2,
+            overflow: 'hidden',
+        },
+        progressFill: {
+            height: '100%',
+            backgroundColor: themeColors.primary,
+            borderRadius: 2,
+        },
+    });
+
     return (
         <View style={styles.levelContainer}>
             <View style={styles.levelHeader}>
@@ -138,65 +209,5 @@ const LevelDisplay = ({
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: SPACING.sm,
-    },
-    scoreItem: {
-        alignItems: 'center',
-        gap: SPACING.xs,
-    },
-    label: {
-        textAlign: 'center',
-    },
-    statsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        paddingVertical: SPACING.sm,
-        paddingHorizontal: SPACING.md,
-        backgroundColor: THEME_COLORS.light,
-        borderRadius: 12,
-    },
-    statItem: {
-        alignItems: 'center',
-        gap: SPACING.xs,
-    },
-    statLabel: {
-        textAlign: 'center',
-    },
-    levelContainer: {
-        alignItems: 'center',
-        paddingVertical: SPACING.sm,
-    },
-    levelHeader: {
-        alignItems: 'center',
-        marginBottom: SPACING.xs,
-    },
-    levelTitle: {
-        textAlign: 'center',
-        marginTop: SPACING.xs,
-    },
-    progressContainer: {
-        alignItems: 'center',
-        gap: SPACING.xs,
-        width: '100%',
-    },
-    progressBar: {
-        width: '80%',
-        height: 4,
-        backgroundColor: THEME_COLORS.letterBoxBorder,
-        borderRadius: 2,
-        overflow: 'hidden',
-    },
-    progressFill: {
-        height: '100%',
-        backgroundColor: THEME_COLORS.primary,
-        borderRadius: 2,
-    },
-});
 
 export { ScoreDisplay, GameStats, LevelDisplay };

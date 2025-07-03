@@ -4,3 +4,4 @@ export { default as VirtualKeyboard } from './VirtualKeyboard';
 export { default as NetworkStatus } from './NetworkStatus';
 export { ScoreDisplay, GameStats, LevelDisplay } from './ScoreDisplay';
 export { AlertModal, ConfirmModal, LoadingModal } from './Modal';
+export { default as CelebrationModal } from './CelebrationModal';

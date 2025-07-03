@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Card as PaperCard } from 'react-native-paper';
-import { THEME_COLORS, BORDER_RADIUS, SPACING } from '../../constants';
+import { useThemeColors } from '../../hooks/useThemeColors';
+import { BORDER_RADIUS, SPACING } from '../../constants';
 
 /**
  * Custom Card atom component
@@ -20,6 +21,48 @@ const Card = ({
     style,
     ...props
 }) => {
+    const THEME_COLORS = useThemeColors();
+
+    const styles = StyleSheet.create({
+        card: {
+            borderRadius: BORDER_RADIUS.lg,
+            backgroundColor: THEME_COLORS.cardBackground,
+            overflow: 'hidden',
+        },
+        content: {
+            padding: 0,
+        },
+        elevated: {
+            elevation: 6,
+            shadowColor: THEME_COLORS.cardShadow,
+            shadowOffset: {
+                width: 0,
+                height: 3,
+            },
+            shadowOpacity: 0.12,
+            shadowRadius: 8,
+            borderWidth: 1,
+            borderColor: 'rgba(0, 0, 0, 0.04)',
+        },
+        outlined: {
+            borderWidth: 1.5,
+            borderColor: THEME_COLORS.border,
+            elevation: 0,
+            shadowColor: 'transparent',
+        },
+        filled: {
+            backgroundColor: THEME_COLORS.light,
+            elevation: 2,
+            shadowColor: THEME_COLORS.cardShadow,
+            shadowOffset: {
+                width: 0,
+                height: 1,
+            },
+            shadowOpacity: 0.08,
+            shadowRadius: 4,
+        },
+    });
+
     const getPaddingStyles = () => {
         switch (padding) {
             case 'none':
@@ -74,34 +117,5 @@ const Card = ({
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    card: {
-        borderRadius: BORDER_RADIUS.lg,
-        backgroundColor: THEME_COLORS.white,
-    },
-    content: {
-        padding: 0,
-    },
-    elevated: {
-        elevation: 4,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-    },
-    outlined: {
-        borderWidth: 1,
-        borderColor: THEME_COLORS.letterBoxBorder,
-        elevation: 0,
-    },
-    filled: {
-        backgroundColor: THEME_COLORS.light,
-        elevation: 0,
-    },
-});
 
 export default Card;

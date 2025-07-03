@@ -3,7 +3,8 @@ import { View, StyleSheet, Animated } from 'react-native';
 import { WordInput } from '../molecules';
 import GuessHistory from './GuessHistory';
 import { Button, Text } from '../atoms';
-import { SPACING, THEME_COLORS, BORDER_RADIUS, GAME_CONFIG } from '../../constants';
+import { useThemeColors } from '../../hooks/useThemeColors';
+import { SPACING, BORDER_RADIUS, GAME_CONFIG } from '../../constants';
 
 /**
  * GameBoard organism component for the main game interface
@@ -39,6 +40,59 @@ const GameBoard = ({
     const [guess, setGuess] = useState('');
     const wordInputRef = useRef();
     const shakeAnimation = useRef(new Animated.Value(0)).current;
+    const THEME_COLORS = useThemeColors();
+
+    const styles = StyleSheet.create({
+        container: {
+            paddingVertical: SPACING.md,
+            paddingHorizontal: SPACING.md,
+            backgroundColor: THEME_COLORS.white,
+            borderRadius: BORDER_RADIUS.lg,
+            shadowColor: '#000',
+            shadowOffset: {
+                width: 0,
+                height: 2,
+            },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 3,
+            flex: 1,
+        },
+        inputSection: {
+            alignItems: 'center',
+            marginBottom: SPACING.md,
+        },
+        instruction: {
+            marginBottom: SPACING.sm,
+            opacity: 0.7,
+        },
+        inputContainer: {
+            marginBottom: SPACING.sm,
+        },
+        submitButton: {
+            minWidth: 100,
+            marginTop: SPACING.xs,
+        },
+        compactHistorySection: {
+            flex: 1,
+            marginTop: SPACING.sm,
+            paddingTop: SPACING.sm,
+            borderTopWidth: 1,
+            borderTopColor: THEME_COLORS.border,
+        },
+        historyTitle: {
+            marginBottom: SPACING.sm,
+            textAlign: 'center',
+        },
+        emptyText: {
+            opacity: 0.6,
+            paddingVertical: SPACING.lg,
+        },
+        compactHistory: {
+            flex: 1,
+            gap: SPACING.xs,
+        },
+    });
 
     // Sync internal guess with prop
     useEffect(() => {
@@ -137,73 +191,46 @@ const GameBoard = ({
                         values={guess.split('').concat(Array(GAME_CONFIG.WORD_LENGTH - guess.length).fill(''))}
                     />
                 </Animated.View>
-            </View>
 
-            {guessHistory.length > 0 && (
-                <View style={styles.historySection}>
-                    <GuessHistory
-                        guesses={guessHistory}
-                        maxHeight={200}
-                        style={styles.guessHistory}
-                    />
-                </View>
-            )}
-
-            <View style={styles.submitSection}>
                 <Button
                     mode="contained"
                     variant="primary"
-                    size="large"
+                    size="small"
                     onPress={handleSubmit}
                     disabled={isSubmitDisabled}
                     loading={loading}
                     style={styles.submitButton}
                 >
-                    {loading ? 'Submitting...' : 'Submit Guess'}
+                    {loading ? 'Submitting...' : 'Submit'}
                 </Button>
+            </View>
+
+            {/* Compact Guess History - Always Visible */}
+            <View style={styles.compactHistorySection}>
+                <Text variant="body2" color="textPrimary" weight="600" style={styles.historyTitle}>
+                    Previous Guesses ({guessHistory.length}/{GAME_CONFIG.MAX_ATTEMPTS})
+                </Text>
+
+                {guessHistory.length === 0 ? (
+                    <Text variant="caption" color="textSecondary" align="center" style={styles.emptyText}>
+                        Your guesses will appear here
+                    </Text>
+                ) : (
+                    <View style={styles.compactHistory}>
+                        {guessHistory.slice(-4).map((guess, index) => (
+                            <GuessHistory
+                                key={`${guess.guess}-${index}`}
+                                guesses={[guess]}
+                                maxHeight={35}
+                                showEmpty={false}
+                                compact={true}
+                            />
+                        ))}
+                    </View>
+                )}
             </View>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        paddingVertical: SPACING.lg,
-        paddingHorizontal: SPACING.md,
-        backgroundColor: THEME_COLORS.white,
-        borderRadius: BORDER_RADIUS.lg,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
-    },
-    inputSection: {
-        alignItems: 'center',
-        marginBottom: SPACING.lg,
-    },
-    instruction: {
-        marginBottom: SPACING.md,
-        opacity: 0.7,
-    },
-    inputContainer: {
-        marginBottom: SPACING.md,
-    },
-    historySection: {
-        marginVertical: SPACING.md,
-    },
-    guessHistory: {
-        alignSelf: 'center',
-    },
-    submitSection: {
-        alignItems: 'center',
-    },
-    submitButton: {
-        minWidth: 200,
-    },
-});
 
 export default GameBoard;

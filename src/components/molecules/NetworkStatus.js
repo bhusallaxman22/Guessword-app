@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text } from '../atoms';
 import { checkBackendHealth } from '../../services/wordService';
-import { THEME_COLORS, SPACING, BORDER_RADIUS } from '../../constants';
+import { useThemeColors } from '../../hooks/useThemeColors';
+import { SPACING, BORDER_RADIUS } from '../../constants';
 
 /**
  * NetworkStatus molecule component - displays online/offline status
@@ -13,6 +14,7 @@ import { THEME_COLORS, SPACING, BORDER_RADIUS } from '../../constants';
 const NetworkStatus = ({ visible = true, position = 'top' }) => {
     const [isOnline, setIsOnline] = useState(true);
     const [checking, setChecking] = useState(false);
+    const THEME_COLORS = useThemeColors();
 
     useEffect(() => {
         if (!visible) return;

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Button as PaperButton } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
-import { THEME_COLORS, BORDER_RADIUS, SPACING } from '../../constants';
+import { useThemeColors } from '../../hooks/useThemeColors';
+import { BORDER_RADIUS, SPACING } from '../../constants';
 
 /**
  * Custom Button atom component
@@ -28,6 +29,7 @@ const Button = ({
     style,
     ...props
 }) => {
+    const THEME_COLORS = useThemeColors();
     const getButtonColor = () => {
         switch (variant) {
             case 'secondary':
@@ -85,27 +87,35 @@ const styles = StyleSheet.create({
     button: {
         borderRadius: BORDER_RADIUS.md,
         elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
     },
     content: {
         paddingVertical: SPACING.xs,
     },
     label: {
         fontWeight: '600',
+        letterSpacing: 0.5,
     },
     smallButton: {
-        fontSize: 14,
-        paddingVertical: SPACING.xs,
+        fontSize: 13,
+        paddingVertical: SPACING.xs - 2,
         paddingHorizontal: SPACING.sm,
+        minHeight: 32,
     },
     mediumButton: {
-        fontSize: 16,
-        paddingVertical: SPACING.sm,
+        fontSize: 15,
+        paddingVertical: SPACING.xs,
         paddingHorizontal: SPACING.md,
+        minHeight: 40,
     },
     largeButton: {
-        fontSize: 18,
-        paddingVertical: SPACING.md,
+        fontSize: 16,
+        paddingVertical: SPACING.sm,
         paddingHorizontal: SPACING.lg,
+        minHeight: 48,
     },
     fullWidth: {
         width: '100%',

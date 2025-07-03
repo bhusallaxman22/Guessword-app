@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { THEME_COLORS, SPACING } from '../../constants';
+import { useThemeColors } from '../../hooks/useThemeColors';
+import { SPACING } from '../../constants';
 
 /**
  * BaseTemplate component providing the main app layout structure
@@ -17,6 +18,7 @@ const BaseTemplate = ({
     gradient = true,
     style,
 }) => {
+    const THEME_COLORS = useThemeColors();
     const ContentWrapper = scrollable ? ScrollView : View;
     const Background = gradient ? LinearGradient : View;
 
@@ -24,8 +26,9 @@ const BaseTemplate = ({
         colors: [THEME_COLORS.gradientStart, THEME_COLORS.gradientEnd],
         start: { x: 0, y: 0 },
         end: { x: 1, y: 1 },
+        locations: [0.0, 1.0],
     } : {
-        style: { backgroundColor: THEME_COLORS.light },
+        style: { backgroundColor: THEME_COLORS.backgroundSolid },
     };
 
     return (
@@ -157,6 +160,9 @@ const SplashTemplate = ({
     );
 };
 
+export { BaseTemplate, GameTemplate, MenuTemplate, SplashTemplate };
+
+
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
@@ -211,5 +217,3 @@ const styles = StyleSheet.create({
         bottom: 0,
     },
 });
-
-export { BaseTemplate, GameTemplate, MenuTemplate, SplashTemplate };

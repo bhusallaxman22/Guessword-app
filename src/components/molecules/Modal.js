@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Modal, Portal } from 'react-native-paper';
-import { Text, Button, Card } from '../atoms';
-import { SPACING, THEME_COLORS, BORDER_RADIUS } from '../../constants';
+import { Text, Button, Card, TextInput } from '../atoms';
+import { useThemeColors } from '../../hooks/useThemeColors';
+import { SPACING, BORDER_RADIUS } from '../../constants';
 
 /**
  * AlertModal molecule component for displaying alerts and messages
@@ -11,8 +12,11 @@ import { SPACING, THEME_COLORS, BORDER_RADIUS } from '../../constants';
  * @param {Function} props.onDismiss - Callback when modal is dismissed
  * @param {string} props.title - Modal title
  * @param {string} props.message - Modal message
- * @param {string} props.type - Alert type (success, error, warning, info)
+ * @param {string} props.type - Alert type (success, error, warning, info, input)
  * @param {Array} props.actions - Array of action buttons
+ * @param {string} props.inputValue - Value for input field (when type is 'input')
+ * @param {Function} props.onInputChange - Callback for input changes
+ * @param {string} props.inputPlaceholder - Placeholder for input field
  */
 const AlertModal = ({
     visible = false,
@@ -21,7 +25,12 @@ const AlertModal = ({
     message,
     type = 'info',
     actions = [],
+    inputValue = '',
+    onInputChange,
+    inputPlaceholder = '',
 }) => {
+    const THEME_COLORS = useThemeColors();
+
     const getTypeColor = () => {
         switch (type) {
             case 'success':
@@ -74,6 +83,18 @@ const AlertModal = ({
                             <Text variant="body1" color="dark" align="center">
                                 {message}
                             </Text>
+                        </View>
+                    )}
+
+                    {type === 'input' && (
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                value={inputValue}
+                                onChangeText={onInputChange}
+                                placeholder={inputPlaceholder}
+                                autoFocus={true}
+                                style={styles.input}
+                            />
                         </View>
                     )}
 
@@ -228,6 +249,13 @@ const styles = StyleSheet.create({
     },
     content: {
         marginBottom: SPACING.lg,
+    },
+    inputContainer: {
+        marginBottom: SPACING.lg,
+        width: '100%',
+    },
+    input: {
+        marginBottom: SPACING.sm,
     },
     actions: {
         gap: SPACING.sm,

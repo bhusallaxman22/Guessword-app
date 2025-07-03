@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text as RNText, StyleSheet } from 'react-native';
-import { THEME_COLORS, FONT_SIZES, SPACING } from '../../constants';
+import { FONT_SIZES, SPACING } from '../../constants';
+import { useThemeColors } from '../../hooks/useThemeColors';
 
 /**
  * Custom Text atom component
@@ -23,6 +24,59 @@ const Text = ({
     style,
     ...props
 }) => {
+    const THEME_COLORS = useThemeColors();
+
+    const styles = StyleSheet.create({
+        text: {
+            fontFamily: 'System',
+        },
+        h1: {
+            fontSize: FONT_SIZES.header,
+            fontWeight: '700',
+            marginBottom: SPACING.md,
+            lineHeight: FONT_SIZES.header * 1.2,
+        },
+        h2: {
+            fontSize: FONT_SIZES.title,
+            fontWeight: '600',
+            marginBottom: SPACING.sm,
+            lineHeight: FONT_SIZES.title * 1.2,
+        },
+        h3: {
+            fontSize: FONT_SIZES.xxl,
+            fontWeight: '600',
+            marginBottom: SPACING.sm,
+            lineHeight: FONT_SIZES.xxl * 1.2,
+        },
+        h4: {
+            fontSize: FONT_SIZES.xl,
+            fontWeight: '600',
+            marginBottom: SPACING.xs,
+            lineHeight: FONT_SIZES.xl * 1.2,
+        },
+        subtitle: {
+            fontSize: FONT_SIZES.lg,
+            fontWeight: '500',
+            marginBottom: SPACING.xs,
+            lineHeight: FONT_SIZES.lg * 1.3,
+        },
+        body1: {
+            fontSize: FONT_SIZES.md,
+            fontWeight: '400',
+            lineHeight: FONT_SIZES.md * 1.4,
+        },
+        body2: {
+            fontSize: FONT_SIZES.sm,
+            fontWeight: '400',
+            lineHeight: FONT_SIZES.sm * 1.4,
+        },
+        caption: {
+            fontSize: FONT_SIZES.xs,
+            fontWeight: '400',
+            lineHeight: FONT_SIZES.xs * 1.3,
+        },
+    });
+
     const getVariantStyles = () => {
         switch (variant) {
             case 'h1':
@@ -70,56 +124,5 @@ const Text = ({
         </RNText>
     );
 };
-
-const styles = StyleSheet.create({
-    text: {
-        fontFamily: 'System',
-    },
-    h1: {
-        fontSize: FONT_SIZES.header,
-        fontWeight: '700',
-        marginBottom: SPACING.md,
-        lineHeight: FONT_SIZES.header * 1.2,
-    },
-    h2: {
-        fontSize: FONT_SIZES.title,
-        fontWeight: '600',
-        marginBottom: SPACING.sm,
-        lineHeight: FONT_SIZES.title * 1.2,
-    },
-    h3: {
-        fontSize: FONT_SIZES.xxl,
-        fontWeight: '600',
-        marginBottom: SPACING.sm,
-        lineHeight: FONT_SIZES.xxl * 1.2,
-    },
-    h4: {
-        fontSize: FONT_SIZES.xl,
-        fontWeight: '600',
-        marginBottom: SPACING.xs,
-        lineHeight: FONT_SIZES.xl * 1.2,
-    },
-    subtitle: {
-        fontSize: FONT_SIZES.lg,
-        fontWeight: '500',
-        marginBottom: SPACING.xs,
-        lineHeight: FONT_SIZES.lg * 1.3,
-    },
-    body1: {
-        fontSize: FONT_SIZES.md,
-        fontWeight: '400',
-        lineHeight: FONT_SIZES.md * 1.4,
-    },
-    body2: {
-        fontSize: FONT_SIZES.sm,
-        fontWeight: '400',
-        lineHeight: FONT_SIZES.sm * 1.4,
-    },
-    caption: {
-        fontSize: FONT_SIZES.xs,
-        fontWeight: '400',
-        lineHeight: FONT_SIZES.xs * 1.3,
-    },
-});
 
 export default Text;

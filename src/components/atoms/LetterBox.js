@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
-import { THEME_COLORS, BORDER_RADIUS, SPACING, FONT_SIZES } from '../../constants';
+import { useThemeColors } from '../../hooks/useThemeColors';
+import { BORDER_RADIUS, SPACING, FONT_SIZES } from '../../constants';
 
 /**
  * Custom LetterBox atom component for word input
@@ -25,6 +26,65 @@ const LetterBox = React.forwardRef(({
     style,
     ...props
 }, ref) => {
+    const themeColors = useThemeColors();
+
+    const styles = StyleSheet.create({
+        letterBox: {
+            width: 48,
+            height: 48,
+            borderRadius: BORDER_RADIUS.md,
+            borderWidth: 2,
+            borderColor: themeColors.border,
+            backgroundColor: themeColors.cardBackground,
+            justifyContent: 'center',
+            alignItems: 'center',
+            elevation: 2,
+            shadowColor: themeColors.cardShadow,
+            shadowOffset: {
+                width: 0,
+                height: 2,
+            },
+            shadowOpacity: 0.08,
+            shadowRadius: 4,
+        },
+        input: {
+            width: '100%',
+            height: '100%',
+            textAlign: 'center',
+            fontSize: FONT_SIZES.lg,
+            fontWeight: '700',
+            padding: 0,
+            margin: 0,
+            borderWidth: 0,
+            backgroundColor: 'transparent',
+            color: themeColors.textPrimary,
+        },
+        focused: {
+            borderColor: themeColors.primary,
+            borderWidth: 2.5,
+            transform: [{ scale: 1.05 }],
+            shadowColor: themeColors.primary,
+            shadowOffset: {
+                width: 0,
+                height: 0,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 8,
+            elevation: 6,
+        },
+        error: {
+            borderColor: themeColors.danger,
+            backgroundColor: '#fff5f5',
+            shadowColor: themeColors.danger,
+            shadowOpacity: 0.2,
+        },
+        disabled: {
+            opacity: 0.6,
+            backgroundColor: themeColors.light,
+            borderColor: themeColors.border,
+        },
+    });
+
     const boxStyle = [
         styles.letterBox,
         focused && styles.focused,
@@ -54,51 +114,6 @@ const LetterBox = React.forwardRef(({
             />
         </View>
     );
-});
-
-const styles = StyleSheet.create({
-    letterBox: {
-        width: 50,
-        height: 50,
-        borderRadius: BORDER_RADIUS.md,
-        borderWidth: 2,
-        borderColor: THEME_COLORS.letterBoxBorder,
-        backgroundColor: THEME_COLORS.letterBoxBackground,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    input: {
-        width: '100%',
-        height: '100%',
-        textAlign: 'center',
-        fontSize: FONT_SIZES.xl,
-        fontWeight: '600',
-        padding: 0,
-        margin: 0,
-        borderWidth: 0,
-        backgroundColor: 'transparent',
-        color: THEME_COLORS.dark,
-    },
-    focused: {
-        borderColor: THEME_COLORS.primary,
-        transform: [{ scale: 1.05 }],
-        shadowColor: THEME_COLORS.primary,
-        shadowOffset: {
-            width: 0,
-            height: 0,
-        },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 5,
-    },
-    error: {
-        borderColor: THEME_COLORS.danger,
-        shadowColor: THEME_COLORS.danger,
-    },
-    disabled: {
-        opacity: 0.6,
-        backgroundColor: THEME_COLORS.light,
-    },
 });
 
 export default LetterBox;

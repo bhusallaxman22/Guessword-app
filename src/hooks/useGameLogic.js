@@ -6,8 +6,9 @@ import { GAME_CONFIG, MESSAGES } from '../constants';
 
 /**
  * Custom hook for managing game state and logic
+ * @param {Function} letterStatesProcessor - Optional function to process letter states based on settings
  */
-export const useGameLogic = () => {
+export const useGameLogic = (letterStatesProcessor = null) => {
     const [targetWord, setTargetWord] = useState('');
     const [currentLevel, setCurrentLevel] = useState(1);
     const [currentAttempts, setCurrentAttempts] = useState(0);
@@ -112,20 +113,33 @@ export const useGameLogic = () => {
         const scores = calculateScores(upperGuess, targetWord);
 
         // Update letter states for virtual keyboard
-        const newLetterStates = { ...letterStates };
-        for (let i = 0; i < upperGuess.length; i++) {
-            const letter = upperGuess[i];
-            const currentScore = scores.details[i];
+        let newLetterStates = { ...letterStates };
 
-            // Priority: correct > present > absent
-            // Don't downgrade a letter's state
-            if (currentScore === 'green' || !newLetterStates[letter]) {
-                newLetterStates[letter] = currentScore === 'green' ? 'correct' :
-                    currentScore === 'yellow' ? 'present' : 'absent';
-            } else if (currentScore === 'yellow' && newLetterStates[letter] === 'absent') {
-                newLetterStates[letter] = 'present';
+        if (letterStatesProcessor) {
+            // Use settings-based processing
+            const guessResult = {
+                correct: scores.details.map(detail => detail === 'green'),
+                present: scores.details.map(detail => detail === 'yellow'),
+                absent: scores.details.map(detail => detail === 'grey')
+            };
+            newLetterStates = letterStatesProcessor(letterStates, guessResult, upperGuess);
+        } else {
+            // Default processing (medium difficulty)
+            for (let i = 0; i < upperGuess.length; i++) {
+                const letter = upperGuess[i];
+                const currentScore = scores.details[i];
+
+                // Priority: correct > present > absent
+                // Don't downgrade a letter's state
+                if (currentScore === 'green' || !newLetterStates[letter]) {
+                    newLetterStates[letter] = currentScore === 'green' ? 'correct' :
+                        currentScore === 'yellow' ? 'present' : 'absent';
+                } else if (currentScore === 'yellow' && newLetterStates[letter] === 'absent') {
+                    newLetterStates[letter] = 'present';
+                }
             }
         }
+
         setLetterStates(newLetterStates);
 
         // Add to history

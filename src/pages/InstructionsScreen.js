@@ -3,7 +3,8 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import { MenuTemplate } from '../components/templates';
 import { Card, Text, Button } from '../components/atoms';
 import { ScoreDisplay } from '../components/molecules';
-import { SPACING, THEME_COLORS, BORDER_RADIUS, GAME_CONFIG } from '../constants';
+import { useThemeColors } from '../hooks/useThemeColors';
+import { SPACING, BORDER_RADIUS, GAME_CONFIG } from '../constants';
 
 /**
  * InstructionsScreen page component
@@ -13,6 +14,92 @@ import { SPACING, THEME_COLORS, BORDER_RADIUS, GAME_CONFIG } from '../constants'
  */
 const InstructionsScreen = ({ navigation, route }) => {
     const { cheatModeActive, targetWord } = route.params || {};
+    const THEME_COLORS = useThemeColors();
+
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+        },
+        header: {
+            marginBottom: SPACING.xl,
+        },
+        title: {
+            textShadowColor: 'rgba(0, 0, 0, 0.3)',
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 2,
+        },
+        subtitle: {
+            textShadowColor: 'rgba(0, 0, 0, 0.2)',
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 1,
+            marginTop: SPACING.sm,
+        },
+        cheatBox: {
+            backgroundColor: THEME_COLORS.warning,
+            paddingVertical: SPACING.sm,
+            paddingHorizontal: SPACING.md,
+            borderRadius: BORDER_RADIUS.md,
+            marginTop: SPACING.md,
+            borderWidth: 2,
+            borderColor: THEME_COLORS.danger,
+        },
+        contentContainer: {
+            paddingBottom: SPACING.xl,
+        },
+        instructionCard: {
+            marginBottom: SPACING.lg,
+        },
+        sectionTitle: {
+            marginBottom: SPACING.md,
+        },
+        instruction: {
+            marginBottom: SPACING.sm,
+        },
+        exampleContainer: {
+            marginVertical: SPACING.md,
+        },
+        exampleTitle: {
+            marginBottom: SPACING.sm,
+        },
+        exampleRow: {
+            marginBottom: SPACING.md,
+        },
+        scoreDetails: {
+            marginTop: SPACING.md,
+        },
+        scoreDetail: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: SPACING.md,
+        },
+        scoreIcon: {
+            marginRight: SPACING.md,
+            minWidth: 30,
+            alignItems: 'center',
+        },
+        scoreText: {
+            flex: 1,
+        },
+        difficultySection: {
+            marginTop: SPACING.lg,
+        },
+        difficultyItem: {
+            marginBottom: SPACING.md,
+        },
+        difficultyTitle: {
+            marginBottom: SPACING.xs,
+        },
+        footer: {
+            marginTop: SPACING.xl,
+        },
+        greenDot: {
+            color: THEME_COLORS.scoreGreen,
+        },
+        yellowDot: {
+            color: THEME_COLORS.scoreYellow,
+        },
+    });
+
     const handleBackToGame = () => {
         navigation.goBack();
     };
@@ -36,7 +123,7 @@ const InstructionsScreen = ({ navigation, route }) => {
     );
 
     const renderBasicRules = () => (
-        <Card variant="elevated" padding="large" style={styles.section}>
+        <Card variant="elevated" padding="large" style={styles.instructionCard}>
             <Text variant="h3" color="primary" weight="600" style={styles.sectionTitle}>
                 🎯 Basic Rules
             </Text>
@@ -71,7 +158,7 @@ const InstructionsScreen = ({ navigation, route }) => {
     );
 
     const renderScoring = () => (
-        <Card variant="elevated" padding="large" style={styles.section}>
+        <Card variant="elevated" padding="large" style={styles.instructionCard}>
             <Text variant="h3" color="primary" weight="600" style={styles.sectionTitle}>
                 📊 Scoring System
             </Text>
@@ -88,7 +175,7 @@ const InstructionsScreen = ({ navigation, route }) => {
                 <View style={styles.scoreDetails}>
                     <View style={styles.scoreDetail}>
                         <View style={styles.scoreIcon}>
-                            <Text variant="h4" style={{ color: THEME_COLORS.scoreGreen }}>●</Text>
+                            <Text variant="h4" style={styles.greenDot}>●</Text>
                         </View>
                         <View style={styles.scoreText}>
                             <Text variant="body2" weight="600" color="dark">Green (Correct)</Text>
@@ -100,7 +187,7 @@ const InstructionsScreen = ({ navigation, route }) => {
 
                     <View style={styles.scoreDetail}>
                         <View style={styles.scoreIcon}>
-                            <Text variant="h4" style={{ color: THEME_COLORS.scoreYellow }}>●</Text>
+                            <Text variant="h4" style={styles.yellowDot}>●</Text>
                         </View>
                         <View style={styles.scoreText}>
                             <Text variant="body2" weight="600" color="dark">Yellow (Present)</Text>
@@ -115,18 +202,18 @@ const InstructionsScreen = ({ navigation, route }) => {
     );
 
     const renderExamples = () => (
-        <Card variant="elevated" padding="large" style={styles.section}>
+        <Card variant="elevated" padding="large" style={styles.instructionCard}>
             <Text variant="h3" color="primary" weight="600" style={styles.sectionTitle}>
                 💡 Examples
             </Text>
 
-            <View style={styles.examples}>
+            <View style={styles.exampleContainer}>
                 <View style={styles.example}>
                     <Text variant="body2" weight="600" color="dark" style={styles.exampleTitle}>
                         If the hidden word is "BIRD":
                     </Text>
 
-                    <View style={styles.exampleCase}>
+                    <View style={styles.exampleRow}>
                         <View style={styles.exampleGuess}>
                             <Text variant="body1" weight="600" color="dark">Guess: WORD</Text>
                             <ScoreDisplay green={1} yellow={1} size="medium" />
@@ -136,7 +223,7 @@ const InstructionsScreen = ({ navigation, route }) => {
                         </Text>
                     </View>
 
-                    <View style={styles.exampleCase}>
+                    <View style={styles.exampleRow}>
                         <View style={styles.exampleGuess}>
                             <Text variant="body1" weight="600" color="dark">Guess: BIRD</Text>
                             <ScoreDisplay green={4} yellow={0} size="medium" />
@@ -151,7 +238,7 @@ const InstructionsScreen = ({ navigation, route }) => {
     );
 
     const renderTips = () => (
-        <Card variant="elevated" padding="large" style={styles.section}>
+        <Card variant="elevated" padding="large" style={styles.instructionCard}>
             <Text variant="h3" color="primary" weight="600" style={styles.sectionTitle}>
                 💭 Tips & Strategies
             </Text>
@@ -215,105 +302,5 @@ const InstructionsScreen = ({ navigation, route }) => {
         />
     );
 };
-
-const styles = StyleSheet.create({
-    header: {
-        marginBottom: SPACING.lg,
-    },
-    title: {
-        textShadowColor: 'rgba(0, 0, 0, 0.3)',
-        textShadowOffset: { width: 1, height: 1 },
-        textShadowRadius: 2,
-    },
-    subtitle: {
-        marginTop: SPACING.sm,
-        opacity: 0.9,
-        textShadowColor: 'rgba(0, 0, 0, 0.3)',
-        textShadowOffset: { width: 1, height: 1 },
-        textShadowRadius: 2,
-    },
-    content: {
-        flex: 1,
-    },
-    section: {
-        marginBottom: SPACING.lg,
-    },
-    sectionTitle: {
-        marginBottom: SPACING.md,
-    },
-    rulesList: {
-        gap: SPACING.sm,
-    },
-    ruleItem: {
-        paddingLeft: SPACING.sm,
-    },
-    scoringExplanation: {
-        alignItems: 'center',
-    },
-    scoringText: {
-        marginBottom: SPACING.md,
-        textAlign: 'center',
-    },
-    scoreExample: {
-        marginBottom: SPACING.lg,
-    },
-    scoreDetails: {
-        width: '100%',
-        gap: SPACING.md,
-    },
-    scoreDetail: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: SPACING.md,
-    },
-    scoreIcon: {
-        width: 30,
-        alignItems: 'center',
-    },
-    scoreText: {
-        flex: 1,
-    },
-    examples: {
-        gap: SPACING.md,
-    },
-    example: {
-        gap: SPACING.sm,
-    },
-    exampleTitle: {
-        marginBottom: SPACING.sm,
-    },
-    exampleCase: {
-        marginBottom: SPACING.sm,
-        paddingLeft: SPACING.sm,
-    },
-    exampleGuess: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: SPACING.xs,
-    },
-    exampleExplanation: {
-        fontStyle: 'italic',
-        opacity: 0.8,
-    },
-    tipsList: {
-        gap: SPACING.md,
-    },
-    tip: {
-        paddingLeft: SPACING.sm,
-    },
-    footer: {
-        marginTop: SPACING.lg,
-    },
-    cheatBox: {
-        backgroundColor: THEME_COLORS.warning,
-        paddingVertical: SPACING.sm,
-        paddingHorizontal: SPACING.md,
-        borderRadius: BORDER_RADIUS.md,
-        marginTop: SPACING.md,
-        borderWidth: 2,
-        borderColor: THEME_COLORS.danger,
-    },
-});
 
 export default InstructionsScreen;

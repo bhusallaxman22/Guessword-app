@@ -3,7 +3,8 @@ import { View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import { Text, Card, Button } from '../atoms';
 import { formatTime } from '../../utils/gameUtils';
-import { SPACING, THEME_COLORS, FONT_SIZES } from '../../constants';
+import { useThemeColors } from '../../hooks/useThemeColors';
+import { SPACING, FONT_SIZES } from '../../constants';
 
 /**
  * Leaderboard organism component for displaying top scores
@@ -22,6 +23,87 @@ const Leaderboard = ({
     maxEntries = 10,
 }) => {
     const [refreshing, setRefreshing] = useState(false);
+    const THEME_COLORS = useThemeColors();
+
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            maxHeight: 500,
+        },
+        header: {
+            paddingVertical: SPACING.md,
+            paddingHorizontal: SPACING.md,
+            backgroundColor: THEME_COLORS.light,
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
+        },
+        subtitle: {
+            marginTop: SPACING.xs,
+            opacity: 0.7,
+        },
+        content: {
+            flex: 1,
+        },
+        emptyState: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingVertical: SPACING.xl,
+            paddingHorizontal: SPACING.lg,
+        },
+        emptyTitle: {
+            marginBottom: SPACING.md,
+        },
+        emptyText: {
+            marginBottom: SPACING.lg,
+            opacity: 0.7,
+            textAlign: 'center',
+        },
+        refreshButton: {
+            marginTop: SPACING.md,
+        },
+        scrollContainer: {
+            flex: 1,
+        },
+        dataTable: {
+            backgroundColor: THEME_COLORS.white,
+        },
+        tableHeader: {
+            backgroundColor: THEME_COLORS.primary,
+            paddingVertical: SPACING.sm,
+        },
+        headerText: {
+            color: THEME_COLORS.white,
+            fontWeight: '600',
+            fontSize: FONT_SIZES.sm,
+        },
+        tableRow: {
+            borderBottomWidth: 1,
+            borderBottomColor: THEME_COLORS.letterBoxBorder,
+            paddingVertical: SPACING.xs,
+        },
+        currentUserRow: {
+            backgroundColor: THEME_COLORS.light,
+            borderBottomColor: THEME_COLORS.primary,
+            borderBottomWidth: 2,
+        },
+        rankCell: {
+            flex: 0.8,
+            justifyContent: 'center',
+        },
+        nameCell: {
+            flex: 2,
+            justifyContent: 'center',
+        },
+        attemptsCell: {
+            flex: 1,
+            justifyContent: 'center',
+        },
+        timeCell: {
+            flex: 1,
+            justifyContent: 'center',
+        },
+    });
 
     const handleRefresh = async () => {
         if (onRefresh) {
@@ -165,85 +247,5 @@ const Leaderboard = ({
         </Card>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        maxHeight: 500,
-    },
-    header: {
-        paddingVertical: SPACING.md,
-        paddingHorizontal: SPACING.md,
-        backgroundColor: THEME_COLORS.light,
-        borderTopLeftRadius: 16,
-        borderTopRightRadius: 16,
-    },
-    subtitle: {
-        marginTop: SPACING.xs,
-        opacity: 0.7,
-    },
-    content: {
-        flex: 1,
-    },
-    emptyState: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingVertical: SPACING.xl,
-        paddingHorizontal: SPACING.lg,
-    },
-    emptyTitle: {
-        marginBottom: SPACING.md,
-    },
-    emptyText: {
-        marginBottom: SPACING.lg,
-        opacity: 0.7,
-        textAlign: 'center',
-    },
-    refreshButton: {
-        marginTop: SPACING.md,
-    },
-    scrollContainer: {
-        flex: 1,
-    },
-    dataTable: {
-        backgroundColor: THEME_COLORS.white,
-    },
-    tableHeader: {
-        backgroundColor: THEME_COLORS.primary,
-        paddingVertical: SPACING.sm,
-    },
-    headerText: {
-        color: THEME_COLORS.white,
-        fontWeight: '600',
-        fontSize: FONT_SIZES.sm,
-    },
-    tableRow: {
-        borderBottomWidth: 1,
-        borderBottomColor: THEME_COLORS.letterBoxBorder,
-        paddingVertical: SPACING.xs,
-    },
-    currentUserRow: {
-        backgroundColor: THEME_COLORS.light,
-        borderBottomColor: THEME_COLORS.primary,
-        borderBottomWidth: 2,
-    },
-    rankCell: {
-        flex: 0.8,
-        justifyContent: 'center',
-    },
-    nameCell: {
-        flex: 2,
-        justifyContent: 'center',
-    },
-    attemptsCell: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    timeCell: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-});
 
 export default Leaderboard;

@@ -2,11 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, Alert, Animated } from 'react-native';
 import { GameTemplate } from '../components/templates';
 import { GameBoard, GuessHistory } from '../components/organisms';
-import { GameStats, LevelDisplay, AlertModal, LoadingModal, VirtualKeyboard } from '../components/molecules';
+import { GameStats, LevelDisplay, AlertModal, LoadingModal, VirtualKeyboard, CelebrationModal } from '../components/molecules';
 import { Text, Button } from '../components/atoms';
 import { useGameLogic } from '../hooks/useGameLogic';
 import { useUserData } from '../hooks/useUserData';
-import { SPACING, THEME_COLORS, MESSAGES, GAME_CONFIG } from '../constants';
+import { useSettings } from '../hooks/useSettings';
+import { useThemeColors } from '../hooks/useThemeColors';
+import { SPACING, MESSAGES, GAME_CONFIG } from '../constants';
 
 /**
  * GameScreen page component - Main game interface
@@ -15,6 +17,60 @@ import { SPACING, THEME_COLORS, MESSAGES, GAME_CONFIG } from '../constants';
  */
 const GameScreen = ({ navigation }) => {
     const { userId, username } = useUserData();
+    const { settings, processLetterStates } = useSettings();
+    const themeColors = useThemeColors();
+
+    const styles = StyleSheet.create({
+        screenContainer: {
+            flex: 1,
+            position: 'relative',
+        },
+        header: {
+            marginBottom: SPACING.lg,
+        },
+        titleRow: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: SPACING.md,
+        },
+        title: {
+            flex: 1,
+            textShadowColor: 'rgba(0, 0, 0, 0.3)',
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 2,
+        },
+        helpButton: {
+            marginLeft: SPACING.md,
+        },
+        gameArea: {
+            marginBottom: SPACING.lg,
+        },
+        cheatBox: {
+            backgroundColor: themeColors.warning,
+            paddingVertical: SPACING.sm,
+            paddingHorizontal: SPACING.md,
+            borderRadius: 8,
+            marginBottom: SPACING.md,
+            borderWidth: 1,
+            borderColor: themeColors.danger,
+        },
+        sidebar: {
+            marginBottom: SPACING.lg,
+        },
+        footer: {
+            marginTop: 'auto',
+        },
+        footerButtons: {
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            gap: SPACING.md,
+        },
+        footerButton: {
+            flex: 1,
+        },
+    });
+
     const {
         targetWord,
         currentLevel,
@@ -34,7 +90,7 @@ const GameScreen = ({ navigation }) => {
         clearError,
         activateCheatMode,
         startTimer,
-    } = useGameLogic();
+    } = useGameLogic(processLetterStates);
 
     const [currentGuess, setCurrentGuess] = useState('');
     const [isInputFocused, setIsInputFocused] = useState(false);
@@ -87,11 +143,14 @@ const GameScreen = ({ navigation }) => {
                 setCurrentGuess('');
 
                 if (result.won === true) {
-                    // Game won
+                    // Game won - show celebration modal
                     setResultData({
-                        type: 'success',
+                        type: 'celebration',
                         title: '🎉 Congratulations!',
                         message: `You guessed "${targetWord}" in ${result.attempts} tries! Level ${currentLevel} completed!`,
+                        level: currentLevel,
+                        word: targetWord,
+                        attempts: result.attempts,
                         actions: [
                             {
                                 label: 'Next Level',
@@ -307,7 +366,21 @@ const GameScreen = ({ navigation }) => {
                 />
 
                 {/* Result Modal */}
-                {resultData && (
+                {resultData && resultData.type === 'celebration' && (
+                    <CelebrationModal
+                        visible={showResult}
+                        onDismiss={() => setShowResult(false)}
+                        title={resultData.title}
+                        message={resultData.message}
+                        level={resultData.level}
+                        word={resultData.word}
+                        attempts={resultData.attempts}
+                        actions={resultData.actions}
+                    />
+                )}
+
+                {/* Other Result Modals (Game Over, etc.) */}
+                {resultData && resultData.type !== 'celebration' && (
                     <AlertModal
                         visible={showResult}
                         onDismiss={() => setShowResult(false)}
@@ -338,60 +411,10 @@ const GameScreen = ({ navigation }) => {
                 letterStates={letterStates}
                 disabled={gameOver || loading}
                 visible={isInputFocused}
+                themeColors={themeColors}
             />
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    screenContainer: {
-        flex: 1,
-        position: 'relative',
-    },
-    header: {
-        marginBottom: SPACING.lg,
-    },
-    titleRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: SPACING.md,
-    },
-    title: {
-        flex: 1,
-        textShadowColor: 'rgba(0, 0, 0, 0.3)',
-        textShadowOffset: { width: 1, height: 1 },
-        textShadowRadius: 2,
-    },
-    helpButton: {
-        marginLeft: SPACING.md,
-    },
-    gameArea: {
-        marginBottom: SPACING.lg,
-    },
-    cheatBox: {
-        backgroundColor: THEME_COLORS.warning,
-        paddingVertical: SPACING.sm,
-        paddingHorizontal: SPACING.md,
-        borderRadius: 8,
-        marginBottom: SPACING.md,
-        borderWidth: 1,
-        borderColor: THEME_COLORS.danger,
-    },
-    sidebar: {
-        marginBottom: SPACING.lg,
-    },
-    footer: {
-        marginTop: 'auto',
-    },
-    footerButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        gap: SPACING.md,
-    },
-    footerButton: {
-        flex: 1,
-    },
-});
 
 export default GameScreen;

@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Badge as PaperBadge } from 'react-native-paper';
-import { THEME_COLORS, BORDER_RADIUS, SPACING } from '../../constants';
+import { BORDER_RADIUS, SPACING } from '../../constants';
+import { useThemeColors } from '../../hooks/useThemeColors';
 
 /**
  * Custom Badge atom component for displaying scores
@@ -18,6 +19,48 @@ const Badge = ({
     style,
     ...props
 }) => {
+    const THEME_COLORS = useThemeColors();
+
+    const styles = StyleSheet.create({
+        badge: {
+            borderRadius: BORDER_RADIUS.round,
+            alignItems: 'center',
+            justifyContent: 'center',
+            shadowColor: '#000',
+            shadowOffset: {
+                width: 0,
+                height: 2,
+            },
+            shadowOpacity: 0.15,
+            shadowRadius: 3,
+            elevation: 3,
+        },
+        paperBadge: {
+            alignSelf: 'center',
+            fontWeight: '700',
+        },
+        tiny: {
+            width: 18,
+            height: 18,
+            fontSize: 10,
+        },
+        small: {
+            width: 22,
+            height: 22,
+            fontSize: 12,
+        },
+        medium: {
+            width: 32,
+            height: 32,
+            fontSize: 14,
+        },
+        large: {
+            width: 40,
+            height: 40,
+            fontSize: 16,
+        },
+    });
+
     const getVariantColor = () => {
         switch (variant) {
             case 'green':
@@ -48,6 +91,8 @@ const Badge = ({
 
     const getSizeStyles = () => {
         switch (size) {
+            case 'tiny':
+                return styles.tiny;
             case 'small':
                 return styles.small;
             case 'large':
@@ -81,40 +126,5 @@ const Badge = ({
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    badge: {
-        borderRadius: BORDER_RADIUS.round,
-        alignItems: 'center',
-        justifyContent: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.15,
-        shadowRadius: 3,
-        elevation: 3,
-    },
-    paperBadge: {
-        alignSelf: 'center',
-        fontWeight: '700',
-    },
-    small: {
-        width: 22,
-        height: 22,
-        fontSize: 12,
-    },
-    medium: {
-        width: 32,
-        height: 32,
-        fontSize: 14,
-    },
-    large: {
-        width: 40,
-        height: 40,
-        fontSize: 16,
-    },
-});
 
 export default Badge;

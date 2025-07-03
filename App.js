@@ -13,56 +13,58 @@ import {
   MenuScreen,
   LeaderboardScreen,
   InstructionsScreen,
+  SettingsScreen,
 } from './src/pages';
 
-// Import theme
-import { THEME_COLORS } from './src/constants';
+// Import theme and hooks
+import { useThemeColors } from './src/hooks/useThemeColors';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 const Stack = createStackNavigator();
 
-/**
- * Paper theme configuration
- */
-const paperTheme = {
-  colors: {
-    primary: THEME_COLORS.primary,
-    secondary: THEME_COLORS.secondary,
-    surface: THEME_COLORS.white,
-    background: THEME_COLORS.light,
-    error: THEME_COLORS.danger,
-    onSurface: THEME_COLORS.dark,
-    onBackground: THEME_COLORS.dark,
-  },
-};
-
-/**
- * Navigation theme configuration
- */
-const navigationTheme = {
-  dark: false,
-  colors: {
-    primary: THEME_COLORS.primary,
-    background: THEME_COLORS.light,
-    card: THEME_COLORS.white,
-    text: THEME_COLORS.dark,
-    border: THEME_COLORS.letterBoxBorder,
-    notification: THEME_COLORS.primary,
-  },
-};
-
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
+  const THEME_COLORS = useThemeColors();
+
+  /**
+   * Paper theme configuration
+   */
+  const paperTheme = {
+    colors: {
+      primary: THEME_COLORS.primary,
+      secondary: THEME_COLORS.secondary,
+      surface: THEME_COLORS.white,
+      background: THEME_COLORS.light,
+      error: THEME_COLORS.danger,
+      onSurface: THEME_COLORS.dark,
+      onBackground: THEME_COLORS.dark,
+    },
+  };
+
+  /**
+   * Navigation theme configuration
+   */
+  const navigationTheme = {
+    dark: false,
+    colors: {
+      primary: THEME_COLORS.primary,
+      background: THEME_COLORS.light,
+      card: THEME_COLORS.white,
+      text: THEME_COLORS.dark,
+      border: THEME_COLORS.border,
+      notification: THEME_COLORS.danger,
+    },
+  };
 
   useEffect(() => {
     async function prepare() {
       try {
         // Pre-load fonts, make any API calls you need to do here
         await Font.loadAsync({
-          // Add custom fonts here if needed
+          // Add any custom fonts here
         });
 
         // Artificially delay for two seconds to simulate a slow loading
@@ -144,6 +146,14 @@ export default function App() {
             options={{
               title: 'How to Play',
               headerShown: false, // Hide header for instructions
+            }}
+          />
+          <Stack.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{
+              title: 'Settings',
+              headerShown: false, // Hide header for settings
             }}
           />
         </Stack.Navigator>
