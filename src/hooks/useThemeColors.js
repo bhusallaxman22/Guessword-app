@@ -34,26 +34,89 @@ const loadInitialTheme = async () => {
 export const updateGlobalTheme = async (themeName) => {
     try {
         const baseTheme = THEMES[themeName] || THEMES.default;
+
+        // Better text contrast handling for each theme
+        const getTextColors = (themeName, baseTheme) => {
+            switch (themeName) {
+                case 'dark':
+                    return {
+                        textPrimary: '#ffffff',
+                        textSecondary: '#b2bec3',
+                        textMuted: '#636e72',
+                        textOnPrimary: '#ffffff',
+                        textOnSecondary: '#000000',
+                        textOnBackground: '#ffffff',
+                        textOnSurface: '#ffffff',
+                    };
+                case 'forest':
+                    return {
+                        textPrimary: '#1a4037',
+                        textSecondary: '#2d5a4d',
+                        textMuted: '#6a9080',
+                        textOnPrimary: '#ffffff',
+                        textOnSecondary: '#000000',
+                        textOnBackground: '#ffffff',
+                        textOnSurface: '#1a4037',
+                    };
+                case 'sunset':
+                    return {
+                        textPrimary: '#2d1b14',
+                        textSecondary: '#5d3a28',
+                        textMuted: '#8d5a42',
+                        textOnPrimary: '#ffffff',
+                        textOnSecondary: '#000000',
+                        textOnBackground: '#ffffff',
+                        textOnSurface: '#2d1b14',
+                    };
+                case 'ocean':
+                    return {
+                        textPrimary: '#0d3b3f',
+                        textSecondary: '#1a6b73',
+                        textMuted: '#4a8b93',
+                        textOnPrimary: '#ffffff',
+                        textOnSecondary: '#000000',
+                        textOnBackground: '#ffffff',
+                        textOnSurface: '#0d3b3f',
+                    };
+                default: // default theme
+                    return {
+                        textPrimary: '#2d3436',
+                        textSecondary: '#636e72',
+                        textMuted: '#b2bec3',
+                        textOnPrimary: '#ffffff',
+                        textOnSecondary: '#000000',
+                        textOnBackground: '#ffffff',
+                        textOnSurface: '#2d3436',
+                    };
+            }
+        };
+
+        const textColors = getTextColors(themeName, baseTheme);
+
         const mergedTheme = {
             ...THEME_COLORS,
             ...baseTheme,
+            ...textColors,
+
             // UI colors that depend on theme
             background: baseTheme.background,
             backgroundSolid: baseTheme.light,
             surface: baseTheme.white,
             border: themeName === 'dark' ? '#636e72' : '#e9ecef',
-            textPrimary: baseTheme.dark,
-            textSecondary: themeName === 'dark' ? '#b2bec3' : '#636e72',
+
+            // Card colors with better contrast
+            cardBackground: themeName === 'dark' ? '#2d3436' : baseTheme.white,
+            cardShadow: themeName === 'dark' ? '#000000' : 'rgba(0, 0, 0, 0.1)',
 
             // Game specific colors
             letterBoxBorder: themeName === 'dark' ? '#636e72' : '#ddd',
-            letterBoxBackground: baseTheme.white,
+            letterBoxBackground: themeName === 'dark' ? '#2d3436' : baseTheme.white,
             scoreGreen: baseTheme.success,
             scoreYellow: baseTheme.warning,
 
-            // Keyboard colors
-            keyboardDefault: baseTheme.dark,
-            keyboardDisabled: themeName === 'dark' ? '#636e72' : '#b2bec3',
+            // Keyboard colors with better contrast
+            keyboardDefault: themeName === 'dark' ? '#636e72' : baseTheme.dark,
+            keyboardDisabled: themeName === 'dark' ? '#454f53' : '#b2bec3',
             keyboardSpecial: baseTheme.primary,
         };
 

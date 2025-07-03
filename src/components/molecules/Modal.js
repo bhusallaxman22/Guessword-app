@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { Modal, Portal } from 'react-native-paper';
 import { Text, Button, Card, TextInput } from '../atoms';
 import { useThemeColors } from '../../hooks/useThemeColors';
@@ -72,18 +72,20 @@ const AlertModal = ({
                             {getTypeIcon()}
                         </Text>
                         {title && (
-                            <Text variant="h3" color="dark" weight="600" align="center">
+                            <Text variant="h3" color="onSurface" weight="600" align="center">
                                 {title}
                             </Text>
                         )}
                     </View>
 
                     {message && (
-                        <View style={styles.content}>
-                            <Text variant="body1" color="dark" align="center">
-                                {message}
-                            </Text>
-                        </View>
+                        <ScrollView style={styles.scrollContent} showsVerticalScrollIndicator={false}>
+                            <View style={styles.content}>
+                                <Text variant="body1" color="onSurface" align="left">
+                                    {message}
+                                </Text>
+                            </View>
+                        </ScrollView>
                     )}
 
                     {type === 'input' && (
@@ -159,13 +161,13 @@ const ConfirmModal = ({
             >
                 <Card variant="elevated" padding="large" style={styles.modal}>
                     <View style={styles.header}>
-                        <Text variant="h3" color="dark" weight="600" align="center">
+                        <Text variant="h3" color="onSurface" weight="600" align="center">
                             {title}
                         </Text>
                     </View>
 
                     <View style={styles.content}>
-                        <Text variant="body1" color="dark" align="center">
+                        <Text variant="body1" color="onSurface" align="center">
                             {message}
                         </Text>
                     </View>
@@ -213,7 +215,7 @@ const LoadingModal = ({
             >
                 <Card variant="elevated" padding="large" style={styles.loadingModal}>
                     <View style={styles.loadingContent}>
-                        <Text variant="body1" color="dark" align="center">
+                        <Text variant="body1" color="onSurface" align="center">
                             {message}
                         </Text>
                     </View>
@@ -234,6 +236,7 @@ const styles = StyleSheet.create({
     modal: {
         width: '100%',
         maxWidth: 400,
+        maxHeight: '80%',
     },
     loadingModal: {
         width: '80%',
@@ -247,8 +250,12 @@ const styles = StyleSheet.create({
         fontSize: 32,
         marginBottom: SPACING.sm,
     },
-    content: {
+    scrollContent: {
+        maxHeight: 300,
         marginBottom: SPACING.lg,
+    },
+    content: {
+        paddingHorizontal: SPACING.xs,
     },
     inputContainer: {
         marginBottom: SPACING.lg,

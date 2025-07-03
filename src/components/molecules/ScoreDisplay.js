@@ -40,7 +40,7 @@ const ScoreDisplay = ({
                     {green}
                 </Badge>
                 {showLabels && (
-                    <Text variant="caption" color="dark" style={styles.label}>
+                    <Text variant="caption" color="onSurface" style={styles.label}>
                         Correct
                     </Text>
                 )}
@@ -51,7 +51,7 @@ const ScoreDisplay = ({
                     {yellow}
                 </Badge>
                 {showLabels && (
-                    <Text variant="caption" color="dark" style={styles.label}>
+                    <Text variant="caption" color="onSurface" style={styles.label}>
                         Present
                     </Text>
                 )}
@@ -98,7 +98,7 @@ const GameStats = ({
     return (
         <View style={styles.statsContainer}>
             <View style={styles.statItem}>
-                <Text variant="caption" color="dark" style={styles.statLabel}>
+                <Text variant="caption" color="onSurface" style={styles.statLabel}>
                     Level
                 </Text>
                 <Badge variant="primary" size="medium">
@@ -107,7 +107,7 @@ const GameStats = ({
             </View>
 
             <View style={styles.statItem}>
-                <Text variant="caption" color="dark" style={styles.statLabel}>
+                <Text variant="caption" color="onSurface" style={styles.statLabel}>
                     Attempts Left
                 </Text>
                 <Badge
@@ -119,7 +119,7 @@ const GameStats = ({
             </View>
 
             <View style={styles.statItem}>
-                <Text variant="caption" color="dark" style={styles.statLabel}>
+                <Text variant="caption" color="onSurface" style={styles.statLabel}>
                     Time
                 </Text>
                 <Text variant="body2" weight="600" color="primary">
@@ -185,7 +185,7 @@ const LevelDisplay = ({
                     Level {level}
                 </Text>
                 {title && (
-                    <Text variant="body2" color="dark" style={styles.levelTitle}>
+                    <Text variant="body2" color="onBackground" style={styles.levelTitle}>
                         {title}
                     </Text>
                 )}
@@ -201,7 +201,7 @@ const LevelDisplay = ({
                             ]}
                         />
                     </View>
-                    <Text variant="caption" color="dark">
+                    <Text variant="caption" color="onBackground">
                         {level} / {totalLevels}
                     </Text>
                 </View>

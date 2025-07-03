@@ -444,7 +444,7 @@ const SettingsScreen = ({ navigation }) => {
                 visible={showAboutModal}
                 onDismiss={() => setShowAboutModal(false)}
                 title="About GUESSWORD"
-                message="GUESSWORD v1.0.0\n\nA challenging word guessing game where you have to find 4-letter words in 8 tries or less.\n\nDeveloped by: Your Name\nBuilt with React Native & Expo\n\nFeatures:\n• Multiple difficulty modes\n• Progress tracking\n• Leaderboard system\n• Customizable themes\n• Offline play support"
+                message={`GUESSWORD v1.0.0${'\n\n'}A challenging word guessing game where you have to find 4-letter words in 8 tries or less.${'\n\n'}🎯 Features:${'\n'}• Multiple difficulty modes${'\n'}• Progress tracking & statistics${'\n'}• Leaderboard system${'\n'}• 5 beautiful themes${'\n'}• Offline play support${'\n'}• Virtual keyboard${'\n\n'}👨‍💻 Built with:${'\n'}• React Native & Expo${'\n'}• Modern design principles${'\n'}• Optimized performance${'\n\n'}Enjoy the challenge and have fun!`}
                 type="info"
                 actions={[
                     {
@@ -461,7 +461,7 @@ const SettingsScreen = ({ navigation }) => {
                 visible={showPrivacyModal}
                 onDismiss={() => setShowPrivacyModal(false)}
                 title="Privacy Policy"
-                message="Privacy Policy\n\nThis app stores your game data locally on your device. We do not collect or share any personal information.\n\nData stored locally:\n• Your username\n• Game progress and statistics\n• Settings and preferences\n\nNo data is transmitted to external servers. All your information remains private and secure on your device.\n\nFor questions about privacy, please contact the developer."
+                message={`🔒 Your Privacy Matters${'\n\n'}This app is designed with privacy in mind. All your data stays on your device.${'\n\n'}📱 Data Stored Locally:${'\n'}• Your username and preferences${'\n'}• Game progress and statistics${'\n'}• Settings and theme choices${'\n'}• Leaderboard scores${'\n\n'}🌐 No Data Collection:${'\n'}• No personal information is collected${'\n'}• No data is sent to external servers${'\n'}• No tracking or analytics${'\n'}• No ads or third-party services${'\n\n'}✅ Your Control:${'\n'}• You can reset your data anytime${'\n'}• Uninstalling removes all data${'\n'}• No account required${'\n\n'}Questions? Feel free to contact us!`}
                 type="info"
                 actions={[
                     {

@@ -100,10 +100,41 @@ const Text = ({
     };
 
     const getColor = () => {
-        if (THEME_COLORS[color]) {
-            return THEME_COLORS[color];
+        // Map common color names to appropriate theme colors with good contrast
+        switch (color) {
+            case 'dark':
+                return THEME_COLORS.textPrimary;
+            case 'secondary':
+                return THEME_COLORS.textSecondary;
+            case 'muted':
+                return THEME_COLORS.textMuted;
+            case 'primary':
+                return THEME_COLORS.primary;
+            case 'white':
+                return THEME_COLORS.white;
+            case 'onPrimary':
+                return THEME_COLORS.textOnPrimary;
+            case 'onSecondary':
+                return THEME_COLORS.textOnSecondary;
+            case 'onBackground':
+                return THEME_COLORS.textOnBackground;
+            case 'onSurface':
+                return THEME_COLORS.textOnSurface;
+            case 'success':
+                return THEME_COLORS.success;
+            case 'warning':
+                return THEME_COLORS.warning;
+            case 'danger':
+                return THEME_COLORS.danger;
+            case 'info':
+                return THEME_COLORS.info;
+            default:
+                // If it's a direct color value (hex, rgb, etc.) or a theme color
+                if (THEME_COLORS[color]) {
+                    return THEME_COLORS[color];
+                }
+                return color;
         }
-        return color;
     };
 
     const textStyle = [
