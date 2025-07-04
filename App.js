@@ -14,6 +14,7 @@ import {
   LeaderboardScreen,
   InstructionsScreen,
   SettingsScreen,
+  ScribbleScreen,
 } from './src/pages';
 
 // Import theme and hooks
@@ -154,6 +155,14 @@ export default function App() {
             options={{
               title: 'Settings',
               headerShown: false, // Hide header for settings
+            }}
+          />
+          <Stack.Screen
+            name="Scribble"
+            component={ScribbleScreen}
+            options={{
+              title: 'Scribble',
+              headerShown: false, // Hide header for scribble screen
             }}
           />
         </Stack.Navigator>

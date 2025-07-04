@@ -366,3 +366,83 @@ export const debugPostResult = async (userId, attempts, timeMs) => {
         return false;
     }
 };
+
+/**
+ * Fetch a list of words for the Scribble game by making multiple calls to getWordOfTheDay with random levels.
+ * @param {number} wordCount - Number of words to fetch (default: 20)
+ * @returns {Promise<string[]>} A promise that resolves to an array of words.
+ */
+export const getScribbleWords = async (wordCount = 20) => {
+    try {
+        const words = [];
+        const usedLevels = new Set();
+        const maxLevel = 100; // Assuming levels go up to 100, adjust as needed
+
+        // Generate random levels and fetch words
+        for (let i = 0; i < wordCount; i++) {
+            let level;
+            let attempts = 0;
+
+            // Generate a unique random level (avoid duplicates)
+            do {
+                level = Math.floor(Math.random() * maxLevel) + 1;
+                attempts++;
+            } while (usedLevels.has(level) && attempts < 50); // Prevent infinite loop
+
+            usedLevels.add(level);
+
+            try {
+                const word = await fetchWordForLevel(level);
+                if (word) {
+                    words.push(word);
+                }
+            } catch (error) {
+                console.warn(`Failed to fetch word for level ${level}:`, error.message);
+                // Continue fetching other words even if one fails
+            }
+        }
+
+        if (words.length === 0) {
+            throw new Error('No words could be fetched for Scribble game');
+        }
+
+        console.log(`Fetched ${words.length} words for Scribble game`);
+        return words;
+    } catch (error) {
+        console.error('Error fetching scribble words:', error);
+        throw new Error(`Failed to fetch scribble words: ${error.message}`);
+    }
+};
+
+/**
+ * Record game results to the backend
+ * @param {Object} resultData - Game result data
+ * @param {string} resultData.userId - User ID
+ * @param {number} resultData.attempts - Number of attempts
+ * @param {number} resultData.timeMs - Time in milliseconds
+ * @returns {Promise<boolean>} Promise resolving to success status
+ */
+export const recordGameResults = async ({ userId, attempts, timeMs }) => {
+    try {
+        const response = await fetchWithTimeout(
+            `${API_CONFIG.baseUrl}/recordResult`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId, attempts, timeMs }),
+            },
+            API_CONFIG.timeout
+        );
+
+        if (!response.ok) {
+            throw new Error(`Failed to record game result: ${response.status} ${response.statusText}`);
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Error recording game result:', error);
+        return false;
+    }
+};

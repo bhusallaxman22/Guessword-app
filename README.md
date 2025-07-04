@@ -35,11 +35,12 @@ The app integrates with Netlify Functions hosted at `https://guessword.bhusallax
 - **Word Fetching**: Encrypted words are fetched from the backend and decrypted client-side using AES-CBC encryption
 - **Leaderboard**: Real-time leaderboard updates from the server
 - **Result Recording**: Game results are sent to the server for global leaderboards
+- **Scribble Mode**: Fetches multiple words from different levels for a fast-paced scribble game.
 
 #### API Endpoints
 
 - `GET /genUsername` - Generate a new username and user ID
-- `GET /getWordOfTheDay?level=${level}` - Fetch encrypted word for a specific level
+- `GET /getWordOfTheDay?level=${level}` - Fetch encrypted word for a specific level (used for both regular game and Scribble mode)
 - `POST /recordResult` - Submit game results (userId, attempts, timeMs)
 - `GET /getLeaderboard` - Fetch global leaderboard data
 - `GET /health` - Health check endpoint

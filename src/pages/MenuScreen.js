@@ -177,6 +177,10 @@ const MenuScreen = ({ navigation }) => {
         navigation.navigate('Settings');
     };
 
+    const handleScribble = () => {
+        navigation.navigate('Scribble');
+    };
+
     const renderHeader = () => (
         <View style={styles.header}>
             <View style={styles.titleAccent} />
@@ -266,6 +270,17 @@ const MenuScreen = ({ navigation }) => {
                 🎮 Start Game
             </Button>
 
+            <Button
+                mode="contained"
+                variant="secondary"
+                size="medium"
+                onPress={handleScribble}
+                style={styles.playButton}
+                fullWidth
+            >
+                ✏️ Scribble Mode
+            </Button>
+
             <View style={styles.secondaryButtons}>
                 <Button
                     mode="outlined"
@@ -289,8 +304,8 @@ const MenuScreen = ({ navigation }) => {
             </View>
 
             <Button
-                mode="text"
-                variant="secondary"
+                mode="outlined"
+                variant="danger"
                 size="small"
                 onPress={handleSettings}
                 style={styles.settingsButton}

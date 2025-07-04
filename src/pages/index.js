@@ -4,3 +4,4 @@ export { default as MenuScreen } from './MenuScreen';
 export { default as LeaderboardScreen } from './LeaderboardScreen';
 export { default as InstructionsScreen } from './InstructionsScreen';
 export { default as SettingsScreen } from './SettingsScreen';
+export { default as ScribbleScreen } from './ScribbleScreen';
